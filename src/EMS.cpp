@@ -1,6 +1,9 @@
 #include <iostream>
+using namespace std;
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+
+    cout << "请输入回车继续..." << endl;
+    system("read");
     return 0;
 }

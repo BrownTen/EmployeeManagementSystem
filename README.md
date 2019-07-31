@@ -1,2 +1,12 @@
 # EmployeeManagementSystem
-EmployeeManagementSystem(Designed By Cpp)
+##EmployeeManagementSystem(Designed By Cpp)
+##职工管理系统(C++实现)
+###系统技术
+
+###系统功能
+退出管理系统 / 增加职工信息 / 显示职工信息 / 删除离职职工 / 修改职工信息 / 查找职工信息 / 按照编号排序 / 清空所有文档
+###基本描述
+公司中职工分为三类:普通员工 / 经理 / 老板;显示信息时,需要显示职工编号 / 职工姓名 / 职工岗位 / 职工职责
+普通职工职责:完成经理交给的任务
+经理职责:完成老板交给的任务,并下发任务给员工
+老板职责:管理公司所有事务
