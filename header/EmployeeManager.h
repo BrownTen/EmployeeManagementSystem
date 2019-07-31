@@ -8,6 +8,7 @@ public:
     EmployeeManager();      // 职工管理构造函数
 
     void showMenu();        // 展示菜单
+    void exitSystem();      // 退出系统
 
     ~EmployeeManager();     // 职工管理析构函数
 };

@@ -17,4 +17,10 @@ void EmployeeManager::showMenu() {      // 实现展示菜单
     cout << endl;
 }
 
+void EmployeeManager::exitSystem() {    // 实现退出系统
+    cout << "欢迎下次使用\n请输入回车继续..." << endl;
+    system("read");
+    exit(0);
+}
+
 EmployeeManager::~EmployeeManager() {}  // 实现职工管理类析构函数
