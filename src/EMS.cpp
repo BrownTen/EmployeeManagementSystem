@@ -8,7 +8,7 @@ int main() {
 
     int userSelectNumber;               // 用户功能数字选择
 
-    while(true){
+    while(true) {
         system("clear");                // 每次返回菜单清屏
         employeeManager.showMenu();     // 调用展示菜单函数
         cout << "请输入您的选择(0-7):";

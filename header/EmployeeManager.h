@@ -5,10 +5,10 @@ using namespace std;    // 使用标准命名空间
 // 职工管理类
 class EmployeeManager{
 public:
-    EmployeeManager();      // 职工管理构造函数
+    EmployeeManager();      // 声明职工管理构造函数
 
-    void showMenu();        // 展示菜单
-    void exitSystem();      // 退出系统
+    void showMenu();        // 声明展示菜单
+    void exitSystem();      // 声明退出系统
 
-    ~EmployeeManager();     // 职工管理析构函数
+    ~EmployeeManager();     // 声明职工管理析构函数
 };
