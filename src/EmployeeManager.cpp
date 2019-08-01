@@ -354,6 +354,64 @@ int EmployeeManager ::modifyEmployee() {
     return 1;   // 修改成功,返回1
 }
 
+// 实现查找职工函数
+int EmployeeManager ::findEmployee() {
+    if (this->isEMSFileEmpty){
+        cout << "文件不存在或记录为空\n请输入回车继续..." << endl;
+        system("read");
+        return 0;       // 查找失败,返回0
+    }
+    int select = 0;
+    cout << "请选择查找方式:" << endl;
+    cout << "1.按职工编号查找" << endl;
+    cout << "2.按职工姓名查找" << endl;
+    cout << "请选择(1-2):";
+    cin >> select;
+    if (select == 1){   // 按职工编号查找
+        int employeeId; // 需要查找的职工编号
+        int result;     // 若职工存在返回的职工序号,不存在为0
+        cout << "请输入需要查找的职工编号:";
+        cin >> employeeId;
+        result = this->isEmployeeExist(employeeId);
+        if (!result){
+            cout << "查找失败,职工不存在\n请输入回车继续..." << endl;
+            system("read");
+            return 0;   // 查找失败,返回0
+        }
+        cout << "查找成功,该职工信息如下:" << endl;
+        (*(this->pEmployees + result - 1))->showInfo();
+        cout << "请输入回车继续..." << endl;
+        system("read");
+        return 1;       // 查找成功,返回1
+    } else if(select == 2){     // 按职工姓名查找
+        string employeeName;    // 需要查找的职工姓名
+        cout << "请输入需要查找的职工姓名:";
+        cin >> employeeName;
+        bool flag = false;      // 是否查找到的标志
+        int count = 0;          // 查找到的人数
+        for (int i = 0; i < this->employeeNumber; ++i) {
+            if ((*(this->pEmployees + i))->employeeName == employeeName){
+                cout << "查找到第 " << ++count << " 个该姓名职工,信息如下:" << endl;
+                (*(this->pEmployees + i))->showInfo();
+                flag = true;    // 查找到,标志置true
+            }
+        }
+        if (flag){
+            cout << "请输入回车继续..." << endl;
+            system("read");
+            return 1;   // 查找成功,返回1
+        } else {
+            cout << "查找失败,职工不存在\n请输入回车继续..." << endl;
+            system("read");
+            return 0;   // 查找失败,返回0
+        }
+    } else {
+        cout << "输入有误\n请输入回车继续..." << endl;
+        system("read");
+        return 0;       // 查找失败,返回0
+    }
+}
+
 // -----------------------Getter / Setter函数--------------------------------
 
 // 实现设置职工人数函数

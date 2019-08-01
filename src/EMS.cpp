@@ -30,6 +30,7 @@ int main() {
                 employeeManager.modifyEmployee();
                 break;
             case 5:     // 查找职工
+                employeeManager.findEmployee();
                 break;
             case 6:     // 排序职工
                 break;

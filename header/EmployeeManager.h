@@ -29,6 +29,7 @@ public:
     int isEmployeeExist(int employeeId);// 声明判断职工是否存在函数
     int deleteEmployee();   // 声明删除职工函数
     int modifyEmployee();   // 声明修改职工函数
+    int findEmployee();     // 声明查找职工函数
 
     EmployeeManager & setEmployeeNumber(int employeeNumber);      // 声明设置职工人数函数
     int getEmployeeNumber();        // 声明获得职工人数函数
