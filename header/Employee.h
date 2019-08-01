@@ -6,9 +6,9 @@ using namespace std;
 // 职工基类(抽象类)
 class Employee{
 public:
-    int employeeId;         // 职工ID
+    int employeeId;         // 职工Id
     string employeeName;    // 职工姓名
-    int departmentId;       // 部门ID
+    int departmentId;       // 部门Id
 
     virtual ~Employee(){};                  // 声明虚析构函数
 

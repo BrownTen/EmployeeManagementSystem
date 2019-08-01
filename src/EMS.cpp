@@ -18,6 +18,7 @@ int main() {
                 employeeManager.exitSystem();
                 break;
             case 1:     // 添加职工
+                employeeManager.addEmployee();
                 break;
             case 2:     // 显示职工
                 break;
