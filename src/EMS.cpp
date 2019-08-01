@@ -21,6 +21,7 @@ int main() {
                 employeeManager.addEmployee();
                 break;
             case 2:     // 显示职工
+                employeeManager.showEmployeeInfo();
                 break;
             case 3:     // 删除职工
                 break;

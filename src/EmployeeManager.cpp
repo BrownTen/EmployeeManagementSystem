@@ -3,7 +3,7 @@
 #include "../header/Manager.h"          // 引入经理类头文件
 #include "../header/Boss.h"             // 引入老板类头文件
 
-// 实现职工管理类构造函数,并使用初始化列表方式初始化职工数量为0,职工指针数组指向NULL
+// 实现职工管理类构造函数 /*,并使用初始化列表方式初始化职工数量为0,职工指针数组指向NULL*/
 EmployeeManager ::EmployeeManager()/* : employeeNumber(0),pEmployees(NULL)*/ {
     ifstream ifs;                       // 获取操作文件流对象
     ifs.open(FILENAME, ios::in);        // 打开指定文件
@@ -173,6 +173,26 @@ int EmployeeManager ::saveFile() {
     return 1;
 }
 
+// 实现从文件统计职工人数
+int EmployeeManager::getEmployeeNumberFromFile() {
+    ifstream ifs;
+    ifs.open(FILENAME, ios::in);
+
+    int employeeId;
+    string employeeName;
+    int departmentId;
+    int employeeNumber = 0;
+
+    // 存入的时候以空格分割,取的时候也可以进行空格分割的方式读回
+    // 如果第一行数据读完了,读下一行,当数据都读完之后,退出while循环
+    while(ifs >> employeeId && ifs >> employeeName && ifs >> departmentId){
+        employeeNumber++;   // 记录文件中有多少职工
+    }
+
+    ifs.close();
+    return employeeNumber;
+}
+
 // 实现职工管理类初始化函数
 int EmployeeManager ::initEmployeeManager() {
     ifstream ifs(FILENAME, ios::in);    // 创建流对象并打开文件
@@ -206,23 +226,19 @@ EmployeeManager ::~EmployeeManager() {
     }
 }
 
-int EmployeeManager::getEmployeeNumberFromFile() {
-    ifstream ifs;
-    ifs.open(FILENAME, ios::in);
-
-    int employeeId;
-    string employeeName;
-    int departmentId;
-    int employeeNumber = 0;
-
-    // 存入的时候以空格分割,取的时候也可以进行空格分割的方式读回
-    // 如果第一行数据读完了,读下一行,当数据都读完之后,退出while循环
-    while(ifs >> employeeId && ifs >> employeeName && ifs >> departmentId){
-        employeeNumber++;   // 记录文件中有多少职工
+// 实现显示职工信息函数
+void EmployeeManager ::showEmployeeInfo() {
+    if (this->isEMSFileEmpty){
+        cout << "文件不存在或记录为空" << endl;
+    } else {
+        for (int i = 0; i < this->employeeNumber; ++i) {
+            // 利用多态调用接口
+            (*(this->pEmployees + i))->showInfo();
+            // 指针偏移,相当与this->pEmployees[i]->showInfo();
+        }
     }
-
-    ifs.close();
-    return employeeNumber;
+    cout << "请输入回车继续..." << endl;
+    system("read");
 }
 
 // 实现设置职工人数函数

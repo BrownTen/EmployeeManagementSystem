@@ -4,7 +4,10 @@
 #include "Employee.h"
 using namespace std;    // 使用标准命名空间
 
-#define FILENAME "EMS.txt"  //宏定义需要操作的文件的文件名
+//#define FILENAME "EMS.txt"  //宏定义需要操作的文件的文件名(相对地址)
+#define FILENAME "/Users/brownten_boy/Documents/exercise/CLionProjects/EmployeeManagementSystem/cmake-build-debug/EMS.txt" // 绝对地址
+// 如果使用相对地址,可执行文件启动后建立在相对于用户目录下;而编译器建立在相对Cmakefile下
+// fopen函数使用过程发现,当fopen要打开的文件路径中,包含一个不存在路径,不管fopen函数的第二参数设成什么,都无法建立该文件。
 
 // 职工管理类
 class EmployeeManager{
@@ -19,8 +22,9 @@ public:
     void exitSystem();      // 声明退出系统函数
     int addEmployee();      // 声明增加职工函数
     int saveFile();         // 声明保存文件函数
-    int getEmployeeNumberFromFile();    // 声明统计人数函数
+    int getEmployeeNumberFromFile();    // 声明从文件统计职工人数函数
     int initEmployeeManager();          // 声明职工管理类初始化函数
+    void showEmployeeInfo();            // 声明显示职工信息函数
 
     ~EmployeeManager();     // 声明职工管理析构函数
 
