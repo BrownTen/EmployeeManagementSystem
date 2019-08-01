@@ -218,14 +218,6 @@ int EmployeeManager ::initEmployeeManager() {
     return 1;   // 初始化成功,返回1
 }
 
-// 实现职工管理类析构函数
-EmployeeManager ::~EmployeeManager() {
-    if (this->pEmployees != NULL) {     // 释放堆区数据
-        delete[] this->pEmployees;
-        this->pEmployees = NULL;
-    }
-}
-
 // 实现显示职工信息函数
 void EmployeeManager ::showEmployeeInfo() {
     if (this->isEMSFileEmpty){
@@ -239,6 +231,25 @@ void EmployeeManager ::showEmployeeInfo() {
     }
     cout << "请输入回车继续..." << endl;
     system("read");
+}
+
+// 实现判断职工是否存在
+int EmployeeManager ::isEmployeeExist(int employeeId) {
+    for (int i = 0; i < this->employeeNumber; ++i) {    // 遍历所有职工
+        if ((*(this->pEmployees + i))->employeeId == employeeId){   // 判断employeeId是否相同
+            // 指针偏移,相当于this->pEmployees[i]->employeeId
+            return i + 1;   // 相同则返回第几个(即序号),非下标
+        }
+    }
+        return 0;   //没有找到,返回0
+}
+
+// 实现职工管理类析构函数
+EmployeeManager ::~EmployeeManager() {
+    if (this->pEmployees != NULL) {     // 释放堆区数据
+        delete[] this->pEmployees;
+        this->pEmployees = NULL;
+    }
 }
 
 // 实现设置职工人数函数

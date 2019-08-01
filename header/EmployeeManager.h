@@ -25,6 +25,8 @@ public:
     int getEmployeeNumberFromFile();    // 声明从文件统计职工人数函数
     int initEmployeeManager();          // 声明职工管理类初始化函数
     void showEmployeeInfo();            // 声明显示职工信息函数
+    int isEmployeeExist(int employeeId);// 声明判断职工是否存在
+    int deleteEmp();        // 声明判断职工是否存在函数
 
     ~EmployeeManager();     // 声明职工管理析构函数
 
