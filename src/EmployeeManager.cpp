@@ -3,6 +3,8 @@
 #include "../header/Manager.h"          // 引入经理类头文件
 #include "../header/Boss.h"             // 引入老板类头文件
 
+// ----------------------------(析)构造函数---------------------------------
+
 // 实现职工管理类构造函数 /*,并使用初始化列表方式初始化职工数量为0,职工指针数组指向NULL*/
 EmployeeManager ::EmployeeManager()/* : employeeNumber(0),pEmployees(NULL)*/ {
     ifstream ifs;                       // 获取操作文件流对象
@@ -39,6 +41,16 @@ EmployeeManager ::EmployeeManager()/* : employeeNumber(0),pEmployees(NULL)*/ {
 
     ifs.close();
 }
+
+// 实现职工管理类析构函数
+EmployeeManager ::~EmployeeManager() {
+    if (this->pEmployees != NULL) {     // 释放堆区数据
+        delete[] this->pEmployees;
+        this->pEmployees = NULL;
+    }
+}
+
+// ----------------------------功能函数-------------------------------------
 
 // 实现展示菜单函数
 void EmployeeManager ::showMenu() {
@@ -173,7 +185,7 @@ int EmployeeManager ::saveFile() {
     return 1;
 }
 
-// 实现从文件统计职工人数
+// 实现从文件统计职工人数函数
 int EmployeeManager::getEmployeeNumberFromFile() {
     ifstream ifs;
     ifs.open(FILENAME, ios::in);
@@ -233,7 +245,7 @@ void EmployeeManager ::showEmployeeInfo() {
     system("read");
 }
 
-// 实现判断职工是否存在
+// 实现判断职工是否存在函数
 int EmployeeManager ::isEmployeeExist(int employeeId) {
     for (int i = 0; i < this->employeeNumber; ++i) {    // 遍历所有职工
         if ((*(this->pEmployees + i))->employeeId == employeeId){   // 判断employeeId是否相同
@@ -244,13 +256,44 @@ int EmployeeManager ::isEmployeeExist(int employeeId) {
         return 0;   //没有找到,返回0
 }
 
-// 实现职工管理类析构函数
-EmployeeManager ::~EmployeeManager() {
-    if (this->pEmployees != NULL) {     // 释放堆区数据
-        delete[] this->pEmployees;
-        this->pEmployees = NULL;
+// 实现删除职工函数
+int EmployeeManager ::deleteEmp() {
+    if (this->isEMSFileEmpty){  // 判断文件是否为空
+        cout << "文件不存在或记录为空\n请输入回车继续..." << endl;
+        system("read");
+        return 0;   // 删除失败,返回0
+    }
+    int employeeId; // 需要删除的员工编号
+    int res;        // 若员工存在返回的员工序号,不存在为0
+    cout << "请输入需要删除的职工编号:";
+    cin >> employeeId;
+    res = this->isEmployeeExist(employeeId);
+    if (res){
+        if (this->employeeNumber == 1){     // 只剩最后一名职工的时候
+            this->employeeNumber = 0;       // 职工人数清零
+            delete[] this->pEmployees;      // 职工指针数组清零
+            this->pEmployees = NULL;
+            this->isEMSFileEmpty = true;    // 文件标识置为空
+            cout << "删除成功\n请输入回车继续..." << endl;
+            return 1; // 删除成功,返回1
+        }
+        for (int i = res - 1; i < this->employeeNumber - 1; ++i) {
+            *(this->pEmployees + i) = *(this->pEmployees + i + 1);
+            // 指针偏移,相当于this->pEmployees[i] = this->pEmployees[i+1];
+        }
+        this->employeeNumber--; // 更新职工人数
+        this->saveFile();       // 更新文件
+        cout << "删除成功\n请输入回车继续..." << endl;
+        system("read");
+        return 1;   // 删除成功,返回1
+    } else {
+        cout << "删除失败,职工不存在\n请输入回车继续..." << endl;
+        system("read");
+        return 0;   // 删除失败,返回0
     }
 }
+
+// -----------------------Getter / Setter函数--------------------------------
 
 // 实现设置职工人数函数
 EmployeeManager & EmployeeManager ::setEmployeeNumber(int employeeNumber) {

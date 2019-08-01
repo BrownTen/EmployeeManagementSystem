@@ -24,6 +24,7 @@ int main() {
                 employeeManager.showEmployeeInfo();
                 break;
             case 3:     // 删除职工
+                employeeManager.deleteEmp();
                 break;
             case 4:     // 修改职工
                 break;
