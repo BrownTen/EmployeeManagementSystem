@@ -4,9 +4,44 @@
 #include "../header/Boss.h"             // 引入老板类头文件
 
 // 实现职工管理类构造函数,并使用初始化列表方式初始化职工数量为0,职工指针数组指向NULL
-EmployeeManager ::EmployeeManager() : employeeNumber(0),pEmployees(NULL) {}
+EmployeeManager ::EmployeeManager()/* : employeeNumber(0),pEmployees(NULL)*/ {
+    ifstream ifs;                       // 获取操作文件流对象
+    ifs.open(FILENAME, ios::in);        // 打开指定文件
 
-void EmployeeManager ::showMenu() {      // 实现展示菜单
+    // 1.文件不存在的情况
+    if (!ifs.is_open()){                // 不存在,初始化
+        cout << "文件不存在" << endl;
+        this->employeeNumber = 0;       // 初始化职工人数为0
+        this->isEMSFileEmpty = true;    // 初始化文件标志为true,文件为空
+        this->pEmployees = NULL;        // 初始话职工指针数组为NULL
+        ifs.close();
+        return ;
+    }
+
+    // 2.文件存在,并且没有记录
+    char ch;
+    ifs >> ch;      // 2.1 先从文件中读取一个字符
+    if(ifs.eof()){  // 2.2 如果这一个字符为eof的标志(文件尾部标志),说明文件为空
+        cout << "文件为空" << endl;
+        this->employeeNumber = 0;
+        this->isEMSFileEmpty = true;
+        this->pEmployees = NULL;
+        ifs.close();
+        return ;
+    }
+
+    // 3.当文件存在,并且存在数据
+    int employeeNumber = this->getEmployeeNumberFromFile(); // 获取文件内的职工人数
+    this->employeeNumber = employeeNumber;                  // 初始化职工人数
+    this->isEMSFileEmpty = false;                           // 初始化文件标志为false,文件不为空
+    this->pEmployees = new Employee*[this->employeeNumber]; // 初始化职工指针数组,指向堆区开辟指针数组的内存空间
+    this->initEmployeeManager();                            // 初始化职工管理类数据
+
+    ifs.close();
+}
+
+// 实现展示菜单函数
+void EmployeeManager ::showMenu() {
     cout << "*****************************" << endl;
     cout << "*** 欢迎使用职工管理系统  ***" << endl;
     cout << "*****\t0.退出管理系统\t*****" << endl;
@@ -21,13 +56,15 @@ void EmployeeManager ::showMenu() {      // 实现展示菜单
     cout << endl;
 }
 
-void EmployeeManager ::exitSystem() {    // 实现退出系统
+// 实现退出系统函数
+void EmployeeManager ::exitSystem() {
     cout << "欢迎下次使用\n请输入回车继续..." << endl;
     system("read");
     exit(0);
 }
 
-int EmployeeManager ::addEmployee() {   // 实现增加职工
+// 实现增加职工函数
+int EmployeeManager ::addEmployee() {
     cout << "请输入需要增加职工的数量:";
     int addNumber;      // 需要增加的员工数量
     cin >> addNumber;
@@ -104,7 +141,10 @@ int EmployeeManager ::addEmployee() {   // 实现增加职工
         // 8.保存数据
         this->saveFile();
 
-        // 9.增加成功,返回1
+        // 9.修改文件是否为空标志
+        this->isEMSFileEmpty = false;
+
+        // 10.增加成功,返回1
         cout << "成功添加 " << addNumber << " 名员工\n请输入回车接续..." << endl;
         system("read");
         return 1;
@@ -115,6 +155,7 @@ int EmployeeManager ::addEmployee() {   // 实现增加职工
     }
 }
 
+// 实现保存文件函数
 int EmployeeManager ::saveFile() {
     // 1.创建流对象
     ofstream ofs;
@@ -132,26 +173,75 @@ int EmployeeManager ::saveFile() {
     return 1;
 }
 
-EmployeeManager ::~EmployeeManager() {  // 实现职工管理类析构函数
+// 实现职工管理类初始化函数
+int EmployeeManager ::initEmployeeManager() {
+    ifstream ifs(FILENAME, ios::in);    // 创建流对象并打开文件
+    int employeeId;
+    string employeeName;
+    int departmentId;
+    int i = 0;  // 数组角标 / 循环标识
+    while (ifs >> employeeId && ifs >> employeeName && ifs >> departmentId){
+        Employee *employee = NULL;
+        // 根据不同的部门Id创建不同的对象
+        if (departmentId == 1) {
+            employee = new Staff(employeeId, employeeName, departmentId);
+        } else if (departmentId == 2) {
+            employee = new Manager(employeeId, employeeName, departmentId);
+        } else {
+            employee = new Boss(employeeId, employeeName, departmentId);
+        }
+        *(this->pEmployees + i) = employee;
+        // 指针偏移,相当与this->pEmployees[i] = employee;
+        i++;
+    }
+    ifs.close();
+    return 1;   // 初始化成功,返回1
+}
+
+// 实现职工管理类析构函数
+EmployeeManager ::~EmployeeManager() {
     if (this->pEmployees != NULL) {     // 释放堆区数据
         delete[] this->pEmployees;
         this->pEmployees = NULL;
     }
 }
 
-EmployeeManager EmployeeManager ::setEmployeeNumber(int employeeNumber) {   // 实现设置职工人数函数
+int EmployeeManager::getEmployeeNumberFromFile() {
+    ifstream ifs;
+    ifs.open(FILENAME, ios::in);
+
+    int employeeId;
+    string employeeName;
+    int departmentId;
+    int employeeNumber = 0;
+
+    // 存入的时候以空格分割,取的时候也可以进行空格分割的方式读回
+    // 如果第一行数据读完了,读下一行,当数据都读完之后,退出while循环
+    while(ifs >> employeeId && ifs >> employeeName && ifs >> departmentId){
+        employeeNumber++;   // 记录文件中有多少职工
+    }
+
+    ifs.close();
+    return employeeNumber;
+}
+
+// 实现设置职工人数函数
+EmployeeManager & EmployeeManager ::setEmployeeNumber(int employeeNumber) {
     this->employeeNumber = employeeNumber;
     return *this;
 }
-int EmployeeManager ::getEmployeeNumber() {     // 实现获得职工人数函数
+// 实现获得职工人数函数
+int EmployeeManager ::getEmployeeNumber() {
     return this->employeeNumber;
 }
 
-EmployeeManager EmployeeManager ::setPEmployees(Employee **pEmployees) {    // 实现设置员工数组指针指向函数
+// 实现设置员工数组指针指向函数
+EmployeeManager & EmployeeManager ::setPEmployees(Employee **pEmployees) {
     this->pEmployees = pEmployees;
     return *this;
 }
-Employee** EmployeeManager ::getPEmployees() {  // 实现获取员工数组指针指向函数
+// 实现获取员工数组指针指向函数
+Employee** EmployeeManager ::getPEmployees() {
     return this->pEmployees;
 }
 
