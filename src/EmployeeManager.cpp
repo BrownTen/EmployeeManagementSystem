@@ -3,7 +3,7 @@
 #include "../header/Manager.h"          // 引入经理类头文件
 #include "../header/Boss.h"             // 引入老板类头文件
 
-// ----------------------------(析)构造函数---------------------------------
+// --------------------------(析)构造函数-----------------------------------
 
 // 实现职工管理类构造函数 /*,并使用初始化列表方式初始化职工数量为0,职工指针数组指向NULL*/
 EmployeeManager ::EmployeeManager()/* : employeeNumber(0),pEmployees(NULL)*/ {
@@ -257,18 +257,18 @@ int EmployeeManager ::isEmployeeExist(int employeeId) {
 }
 
 // 实现删除职工函数
-int EmployeeManager ::deleteEmp() {
+int EmployeeManager ::deleteEmployee() {
     if (this->isEMSFileEmpty){  // 判断文件是否为空
         cout << "文件不存在或记录为空\n请输入回车继续..." << endl;
         system("read");
         return 0;   // 删除失败,返回0
     }
-    int employeeId; // 需要删除的员工编号
-    int res;        // 若员工存在返回的员工序号,不存在为0
+    int employeeId; // 需要删除的职工编号
+    int result;        // 若职工存在返回的职工序号,不存在为0
     cout << "请输入需要删除的职工编号:";
     cin >> employeeId;
-    res = this->isEmployeeExist(employeeId);
-    if (res){
+    result = this->isEmployeeExist(employeeId);
+    if (result){
         if (this->employeeNumber == 1){     // 只剩最后一名职工的时候
             this->employeeNumber = 0;       // 职工人数清零
             delete[] this->pEmployees;      // 职工指针数组清零
@@ -277,7 +277,7 @@ int EmployeeManager ::deleteEmp() {
             cout << "删除成功\n请输入回车继续..." << endl;
             return 1; // 删除成功,返回1
         }
-        for (int i = res - 1; i < this->employeeNumber - 1; ++i) {
+        for (int i = result - 1; i < this->employeeNumber - 1; ++i) {
             *(this->pEmployees + i) = *(this->pEmployees + i + 1);
             // 指针偏移,相当于this->pEmployees[i] = this->pEmployees[i+1];
         }
@@ -291,6 +291,67 @@ int EmployeeManager ::deleteEmp() {
         system("read");
         return 0;   // 删除失败,返回0
     }
+}
+
+// 实现修改职工函数
+int EmployeeManager ::modifyEmployee() {
+    if (this->isEMSFileEmpty){
+        cout << "文件不存在或记录为空\n请输入回车继续..." << endl;
+        system("read");
+        return 0;   // 修改失败,返回0
+    }
+    int employeeId; // 需要修改的职工编号
+    int result;     // 若职工存在返回的职工序号,不存在为0
+    cout << "请输入需要修改的职工编号:";
+    cin >> employeeId;
+    result = this->isEmployeeExist(employeeId);
+    if (!result){
+        cout << "修改失败,职工不存在\n请输入回车继续..." << endl;
+        system("read");
+        return 0;   // 修改失败,返回0
+    }
+    // 查到指定编号的职工
+    delete *(this->pEmployees + result - 1);
+    // 指针偏移,相当与this->employeeNumber[result-1];
+
+    int modifyEmployeeId = 0;
+    string modifyEmployeeName = "";
+    int modifyDepartmentId;
+
+    cout << "查到编号为: " << employeeId << " 的员工:\n\t请输入该职工新编号:";
+    cin >> modifyEmployeeId;
+    cout << "\t请输入新姓名:";
+    cin >> modifyEmployeeName;
+    cout << "\t请选择职工的岗位:" << endl;
+    cout << "\t\t1.普通员工" << endl;
+    cout << "\t\t2.经理" << endl;
+    cout << "\t\t3.老板" << endl;
+    cout << "\t请选择(1-3):";
+    cin >> modifyDepartmentId;
+    Employee *employee = NULL;
+    switch (modifyDepartmentId){
+        case 1:
+            employee = new Staff(employeeId, modifyEmployeeName, modifyDepartmentId);
+            break;
+        case 2:
+            employee = new Manager(employeeId, modifyEmployeeName, modifyDepartmentId);
+            break;
+        case 3:
+            employee = new Boss(employeeId, modifyEmployeeName, modifyDepartmentId);
+            break;
+        default:
+            cout << "该条记录创建失败" << endl;
+            cout << "输入有误\n请输入回车继续..." << endl;
+            system("read");
+            break;
+    }
+    // 更新数据到职工管理指针数组中
+    *(this->pEmployees + result - 1) = employee;
+    // 保存至文件
+    this->saveFile();
+    cout << "修改成功\n请输入回车继续" << endl;
+    system("read");
+    return 1;   // 修改成功,返回1
 }
 
 // -----------------------Getter / Setter函数--------------------------------

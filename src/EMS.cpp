@@ -24,9 +24,10 @@ int main() {
                 employeeManager.showEmployeeInfo();
                 break;
             case 3:     // 删除职工
-                employeeManager.deleteEmp();
+                employeeManager.deleteEmployee();
                 break;
             case 4:     // 修改职工
+                employeeManager.modifyEmployee();
                 break;
             case 5:     // 查找职工
                 break;
