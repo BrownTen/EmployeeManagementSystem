@@ -1,8 +1,10 @@
 # EmployeeManagementSystem    
 ## EmployeeManagementSystem(Designed By Cpp)     
-## 职工管理系统(C++实现)     
-### 系统技术   
-C++OOP(封装,继承,多态);多文件结构;指针(指针数组);堆区数据开辟(new)与销毁(delete)    
+## 职工管理系统(C++实现)   
+### 系统开发 / 运行 / 测试环境   
+System:MacOS; IDE:CLion; Language:C++   
+### 使用技术   
+C++OOP(封装,继承,多态);多文件结构;文件存储 / 读取;指针(指针数组,指针偏移 / 取值);堆区数据开辟(new)与销毁(delete)    
 ### 系统功能  
 退出管理系统 / 增加职工信息 / 显示职工信息 / 删除离职职工 / 修改职工信息 / 查找职工信息 / 按照编号排序 / 清空所有文档    
 ### 基本描述  

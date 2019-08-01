@@ -101,7 +101,10 @@ int EmployeeManager ::addEmployee() {   // 实现增加职工
         // 7.更改员工数量
         this->employeeNumber = newSize;
 
-        // 8.增加成功,返回1
+        // 8.保存数据
+        this->saveFile();
+
+        // 9.增加成功,返回1
         cout << "成功添加 " << addNumber << " 名员工\n请输入回车接续..." << endl;
         system("read");
         return 1;
@@ -112,7 +115,29 @@ int EmployeeManager ::addEmployee() {   // 实现增加职工
     }
 }
 
-EmployeeManager ::~EmployeeManager() {}  // 实现职工管理类析构函数
+int EmployeeManager ::saveFile() {
+    // 1.创建流对象
+    ofstream ofs;
+    // 2.打开需要操作的文件
+    ofs.open(FILENAME, ios::out);
+    for (int i = 0; i < this->employeeNumber; ++i) {
+        ofs << (*(this->pEmployees + i))->employeeId << " "     // 二级指针偏移:相当于this->pEmployees[i]->employeeId
+            << (*(this->pEmployees + i))->employeeName << " "   // pEmployees一级指针偏移,即指向数组的位置偏移
+            << (*(this->pEmployees + i))->departmentId          // *取偏移后位置的内容,即数组中的指针
+                << endl;
+    }
+    // 3.关闭文件
+    ofs.close();
+    // 保存成功,返回1
+    return 1;
+}
+
+EmployeeManager ::~EmployeeManager() {  // 实现职工管理类析构函数
+    if (this->pEmployees != NULL) {     // 释放堆区数据
+        delete[] this->pEmployees;
+        this->pEmployees = NULL;
+    }
+}
 
 EmployeeManager EmployeeManager ::setEmployeeNumber(int employeeNumber) {   // 实现设置职工人数函数
     this->employeeNumber = employeeNumber;
