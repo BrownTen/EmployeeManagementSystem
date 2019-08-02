@@ -4,8 +4,8 @@
 #include "Employee.h"
 using namespace std;    // 使用标准命名空间
 
-//#define FILENAME "EMS.txt"  //宏定义需要操作的文件的文件名(相对地址)
-#define FILENAME "/Users/brownten_boy/Documents/exercise/CLionProjects/EmployeeManagementSystem/cmake-build-debug/EMS.txt" // 绝对地址
+#define FILENAME "EMS.txt"  //宏定义需要操作的文件的文件名(相对地址)
+//#define FILENAME "/Users/brownten_boy/Documents/exercise/CLionProjects/EmployeeManagementSystem/cmake-build-debug/EMS.txt" // 绝对地址
 // 如果使用相对地址,可执行文件启动后建立在相对于用户目录下;而编译器建立在相对Cmakefile下
 // 文件打开操作使用过程发现,当要打开的文件路径中,包含一个不存在路径,不管打开函数的其他参数是什么,都无法建立该文件。
 
@@ -30,6 +30,8 @@ public:
     int deleteEmployee();   // 声明删除职工函数
     int modifyEmployee();   // 声明修改职工函数
     int findEmployee();     // 声明查找职工函数
+    void sortEmployee();    // 声明排序函数
+    int cleanEmployee();    // 声明清空数据函数
 
     EmployeeManager & setEmployeeNumber(int employeeNumber);      // 声明设置职工人数函数
     int getEmployeeNumber();        // 声明获得职工人数函数

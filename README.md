@@ -1,6 +1,6 @@
 # EmployeeManagementSystem    
-## EmployeeManagementSystem(Designed By Cpp)     
 ## 职工管理系统(C++实现)   
+EmployeeManagementSystem(Designed By Cpp)     
 ### 系统开发 / 运行 / 测试环境   
 System:MacOS; IDE:CLion; Language:C++   
 ### 使用技术   

@@ -45,6 +45,12 @@ EmployeeManager ::EmployeeManager()/* : employeeNumber(0),pEmployees(NULL)*/ {
 // 实现职工管理类析构函数
 EmployeeManager ::~EmployeeManager() {
     if (this->pEmployees != NULL) {     // 释放堆区数据
+        for (int i = 0; i < this->employeeNumber; ++i) {
+            if (*(this->pEmployees + i) != NULL) {
+                delete *(this->pEmployees + i);
+                *(this->pEmployees + i) = NULL;
+            }
+        }
         delete[] this->pEmployees;
         this->pEmployees = NULL;
     }
@@ -410,6 +416,93 @@ int EmployeeManager ::findEmployee() {
         system("read");
         return 0;       // 查找失败,返回0
     }
+}
+
+// 实现排序函数
+void EmployeeManager ::sortEmployee() {
+    if (this->isEMSFileEmpty){
+        cout << "文件不存在或记录为空\n请输入回车继续..." << endl;
+        system("read");
+        return ;
+    }
+    int select = 0;
+    cout << "请选择查找方式:" << endl;
+    cout << "1.按职工编号升序" << endl;
+    cout << "2.按职工编号降序" << endl;
+    cout << "请选择(1-2):";
+    cin >> select;
+    // 选择排序
+    for (int i = 0; i < this->employeeNumber; ++i) {
+        int minOrMax = i;       // 声明最小值或最大值下标
+        for (int j = i; j < this->employeeNumber; ++j) {
+            if (select == 1){   // 升序
+               if ((*(this->pEmployees + minOrMax))->employeeId > (*(this->pEmployees + j))->employeeId){
+                   minOrMax = j;
+               }
+            } else if (select == 2){    // 降序
+                if ((*(this->pEmployees + minOrMax))->employeeId < (*(this->pEmployees + j))->employeeId){
+                    minOrMax = j;
+                }
+            } else {
+                cout << "输入有误\n请输入回车继续..." << endl;
+                system("read");
+                return ;
+            }
+            if (minOrMax != i) {
+                Employee *temp = *(this->pEmployees + i);
+                *(this->pEmployees + i) = *(this->pEmployees + minOrMax);
+                *(this->pEmployees + minOrMax) = temp;
+            }
+        }
+    }
+    cout << "排序成功,排序后的结果为:" << endl;
+//    this->saveFile();   // 保存排序结果
+    this->showEmployeeInfo();   // 展示所有的职工信息
+}
+
+// 实现清空数据函数
+int EmployeeManager ::cleanEmployee() {
+    if (this->isEMSFileEmpty){
+        cout << "文件不存在或记录为空\n请输入回车继续..." << endl;
+        system("read");
+        return 0;       // 清空失败,返回0
+    }
+    int select = 0;
+    cout << "确认是否清空:" << endl;
+    cout << "1.确认" << endl;
+    cout << "2.返回" << endl;
+    cout << "请选择(1-2):";
+    cin >> select;
+    if (select == 1){   // 确认清空
+        // 打开模式ios::trunc,如果存在删除文件并重新创建
+        ofstream ofs(FILENAME, ios::trunc);
+        ofs.close();
+        // 清除堆区中指针数组 并 清空指针数组中每个指针指向的堆区数据
+        if (this->pEmployees != NULL){
+            for (int i = 0; i < this->employeeNumber; ++i) {
+                if ((*(this->pEmployees + i)) != NULL){
+                    delete *(this->pEmployees + i);
+                    *(this->pEmployees + i) = NULL;
+                }
+            }
+            delete[] this->pEmployees;
+            this->pEmployees = NULL;
+        }
+        // 数组长度初始化为0
+        this->employeeNumber = 0;
+        // 文件是否为空标识置为true
+        this->isEMSFileEmpty = true;
+        cout << "清空成功\n请输入回车继续..." << endl;
+        system("read");
+        return 1;       // 成功清空,返回1
+    } else if (select == 2){
+        return 0;       // 清空失败,返回0
+    } else {
+        cout << "清空失败\n请输入回车继续..." << endl;
+        system("read");
+        return 0;       // 清空失败,返回0
+    }
+
 }
 
 // -----------------------Getter / Setter函数--------------------------------

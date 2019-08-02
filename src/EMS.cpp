@@ -33,8 +33,10 @@ int main() {
                 employeeManager.findEmployee();
                 break;
             case 6:     // 排序职工
+                employeeManager.sortEmployee();
                 break;
             case 7:     // 清空文件
+                employeeManager.cleanEmployee();
                 break;
             default:
                 break;
