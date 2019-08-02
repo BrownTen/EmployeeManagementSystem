@@ -96,7 +96,7 @@ int EmployeeManager ::addEmployee() {
         // 3.将原来的指针数组的内容存放到新的新的指针数组中
         if (this->pEmployees != NULL) {
             for (int i = 0; i < this->employeeNumber; ++i) {
-                *(newPEmployees+i) = *(this->pEmployees+i);
+                *(newPEmployees + i) = *(this->pEmployees + i);
                 // 指针偏移相当与newPEmployees[i] = this->pEmployees[i];
             }
         }
